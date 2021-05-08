@@ -3,6 +3,22 @@
 
 #https://www.reddit.com/r/learnpython/comments/bg644l/learning_to_webscrape_reddit_using_beautiful_soup/
 
+# helper functions 
+import time
+
+def highlight(element):
+    """Highlights (blinks) a Selenium Webdriver element"""
+    driver = element._parent
+    def apply_style(s):
+        driver.execute_script("arguments[0].setAttribute('style', arguments[1]);",
+                              element, s)
+    original_style = element.get_attribute('style')
+    apply_style("background: yellow; border: 2px solid red;")
+    time.sleep(.3)
+    apply_style(original_style)
+
+
+
 ### solution 1: scraping 
 
 ### get all threads of a specific topic: topic -> thread -> comments
@@ -11,8 +27,9 @@ import re
 from bs4 import BeautifulSoup
 from requests import get
 from fake_useragent import UserAgent
-
-
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys 
+from selenium.webdriver.common.by import By
 
 
 def lovely_soup(u):
@@ -77,13 +94,31 @@ def extract_comments(thread_url,comment_number):
 
     # write comments into a table... to think about: how do we extract user info as well, user karma, group memberships, on top of the comments?
     # how to we capture the hirechical structure of the data? comment -> re-comment -> re-re-comments? 
-    # get all commments
+  
 
-shower_thoughts = extract_comments("https://old.reddit.com/r/Showerthoughts/comments/fjtbye/important_psa_no_you_did_not_win_a_gift_card/",
-                                   3)
+shower_thoughts = extract_comments("https://old.reddit.com/r/Showerthoughts/comments/fjtbye/important_psa_no_you_did_not_win_a_gift_card/", 3)
 shower_thoughts
 
-# convert paragraphs of o
+
+
+
+def expand_comments(reddit_url):
+    driver = webdriver.Chrome(executable_path= "C:\\Users\\Henry L\\Downloads\\chromedriver_win32\\chromedriver.exe")
+    driver.get(reddit_url)
+    #print(driver.title) # title of the page
+    #print(driver.current_url) #returns the url of the current page 
+    load_comments=driver.find_elements_by_class_name("button")
+    counter = 0 
+    for element in load_comments:
+        print(element.text)
+        counter =counter +1 
+        try:
+            element.click() # this is NOT working! check out: https://www.browserstack.com/guide/action-class-in-selenium
+        except Exception as e: 
+            print(e)
+        print("i th click: ", counter)
+expand_comments("https://old.reddit.com/r/Showerthoughts/comments/fjtbye/important_psa_no_you_did_not_win_a_gift_card/")
+
 
 #f= open("shower_thoughts_comments_example.txt","w+")
 #f.write(shower_thoughts)
