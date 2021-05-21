@@ -1,5 +1,6 @@
 # Tasks
 May 11: work on the Action class to expand "load comments" button clicking with Selenium
+May 25: work on redesign toggling comments in the asych way by using celery+redis etc. look into parsing reddit json file 
 
 
 # Mosco: A/B Test Toolkits 
