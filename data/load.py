@@ -20,8 +20,10 @@ def highlight(element):
 
 
 ### solution 1: scraping 
-
 ### get all threads of a specific topic: topic -> thread -> comments
+
+
+
 
 import re 
 from bs4 import BeautifulSoup
@@ -30,6 +32,8 @@ from fake_useragent import UserAgent
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys 
 from selenium.webdriver.common.by import By
+import time 
+
 
 
 def lovely_soup(u):
@@ -113,16 +117,23 @@ def expand_comments(reddit_url):
         print(element.text)
         counter =counter +1 
         try:
+            print(type(element))
             element.click() # this is NOT working! check out: https://www.browserstack.com/guide/action-class-in-selenium
+            time.sleep(2)
+            # read this: https://realpython.com/async-io-python/'
+            # json: https://www.youtube.com/watch?v=iA2KMPF1Ud0
         except Exception as e: 
             print(e)
         print("i th click: ", counter)
+  
 expand_comments("https://old.reddit.com/r/Showerthoughts/comments/fjtbye/important_psa_no_you_did_not_win_a_gift_card/")
 
 
 #f= open("shower_thoughts_comments_example.txt","w+")
 #f.write(shower_thoughts)
 
+
+#parse the json file: https://github.com/dmarx/reddit_comment_scraper/blob/master/reddit_comment_scraper.py
 
 ### create a classs caled RedditComments
 class RedditThread:
